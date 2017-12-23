@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<!-- 客户移交 -->
+<hibernate-mapping package="com.lzq.pojo">
+
+	<class name="TransferHistory" table="t_TransferHistory">
+		<id name="id" type="java.lang.Long">
+			<generator class="native"></generator>
+		</id>
+		
+		<property name="reason" length="500"></property>
+		<property name="transferTime" type="timestamp"></property>
+		
+		<!-- “客户” -->
+		<many-to-one name="customer" class="Customer" column="customer_id"></many-to-one>
+		
+		<!-- 旧营销人员 -->
+		<many-to-one name="oddSeller" class="Employee" column="oddSeller"></many-to-one>
+		<!-- 新营销人员 -->
+		<many-to-one name="newSeller" class="Employee" column="newSeller"></many-to-one>
+		
+	</class>
+
+</hibernate-mapping>
+
+
+

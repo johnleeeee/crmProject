@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    	 http://www.springframework.org/schema/beans/spring-beans.xsd
+     	 http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context.xsd
+         http://www.springframework.org/schema/aop
+         http://www.springframework.org/schema/aop/spring-aop.xsd
+         http://www.springframework.org/schema/tx
+     	 http://www.springframework.org/schema/tx/spring-tx.xsd">
+        <!--所有模块的公共配置-->
+        <!--1.数据源-->
+        <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+                <property name="jdbcUrl" value="jdbc:mysql:///crm"/>
+                <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+                <property name="user" value="root"/>
+                <property name="password" value="root"/>
+                <property name="initialPoolSize" value="2"></property>
+                <property name="maxPoolSize" value="6"/>
+        </bean>
+        <!--2.Spring 对SessonFactory创建的支持-->
+        <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+                <property name="dataSource" ref="dataSource"></property>
+                <property name="hibernateProperties">
+                        <props>
+                                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL55Dialect</prop>
+                                <prop key="hibernate.show_sql">true</prop>
+                                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                        </props>
+                </property>
+                <property name="mappingLocations">
+                        <list>
+                                <value>classpath:com/lzq/pojo/*.hbm.xml</value>
+                        </list>
+                </property>
+        </bean>
+        <!--3.Spring 事务管理配置-->
+        <!--a.配置事务管理器类-->
+        <bean id="txManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+                <property name="sessionFactory" ref="sessionFactory"></property>
+        </bean>
+        <!--b.事务通知 (切面类)-->
+        <!--get/find开头的方法，如果有事务支持则支持，且是只读事务；没有事务也可以-->
+        <!--save/update/delete开头的方法，必须在事务的环境中运行-->
+        <!-- * 最后上面都不满足其他方法使用读写事务（有事务环境）-->
+        <tx:advice id="txAdvice" transaction-manager="txManager">
+                <tx:attributes>
+                        <tx:method name="get*" read-only="true" propagation="SUPPORTS"/>
+                        <tx:method name="find*" read-only="true" propagation="SUPPORTS"/>
+                        <tx:method name="save*" propagation="REQUIRED"/>
+                        <tx:method name="update*" propagation="REQUIRED"/>
+                        <tx:method name="delete*" propagation="REQUIRED"/>
+                        <tx:method name="*" read-only="false"/>
+                </tx:attributes>
+        </tx:advice>
+        <!--c.Aop配置-->
+        <aop:config proxy-target-class="true">
+                <aop:pointcut id="pt" expression="execution(* com.lzq.service.impl.*Service.*(..))"/>
+                <aop:advisor advice-ref="txAdvice" pointcut-ref="pt"/>
+        </aop:config>
+        <!--公用配置 抽象的bean，不会被实例化，供其他bean继承-->
+        <bean id="baseDao" abstract="true">
+                <property name="sessionFactory" ref="sessionFactory"/>
+        </bean>
+</beans>

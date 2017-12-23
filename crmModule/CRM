@@ -1,0 +1,87 @@
+一，需求分析：
+CRM:Customer Relation Manager 客户关系管理系统
+
+主要功能：
+    部门信息：Department
+    员工信息：Employee
+    客户资料：Customer
+
+    客户跟进历史：记录每次的跟进的历史记录：主题，内容，效果等。
+    客户移交记录：支持把某个营销人员跟进的客户，进行移交给其他营销人员。
+    客户资源地：对暂时不需要跟进的客户放入资源池。
+                -->把客户放入资源池
+                -->从资源池认领客户
+    项目开发模式：
+        瀑布模式：从上往下（需求确认清晰）
+        螺旋模式：模块
+    ------------------------------------------------------------------
+    ------------------------------------------------------------------
+二，项目设计：
+    1.数据库设计
+        （设计库表，表的关系）
+
+    2.系统架构设计
+            （
+                   开发：
+                        CRUD 实现基本业务
+                        公用类：
+                               1.自己用
+                               2.给别人用
+                        公用组件
+                        平台开发
+                        面向解决方案开发
+            ）
+        （系统项目结构：分层，引用的组件及版本，工具类）
+三，代码
+    注意：
+        1.严格实现需求定义的功能
+        2.写代码前，仔细阅读代码规范
+        3.coding...
+四,测试
+
+五，实施部署
+        1.项目部署到客户服务器上
+        2.试运行
+        3.运行上线
+六，验收
+    初验，中验，终验
+
+
+
+项目开发环境搭建的整体步骤（采用S2SH）
+    1.搭建Spring环境
+        使用的jar文件
+          Spring-core 核心
+          Spring-aop 切面
+          Spring-orm 持久层支持
+
+          Spring-test spring提供的测试方案
+
+        bean.xml 主配置文件
+    测试
+    2.搭建Hibernate环境
+        hibernate逆向工程
+            根据数据库表，自动生成entity/*.hbm.xml/dao
+            先创建hibernate.cfg.xml，再配置Database,再使用Persistence
+
+        主配置文件：hibernate.cfg.xml
+                (可选，如果在Spring中实现配置的话)
+        映射文件：**.hbm.xml
+    测试
+    3.Spring与Hibernate整合
+            整合环境： bean-public.xml 公用配置SessionFactory创建支持
+            DepartmentDao：Spring对Hibernate支持的工具类HibernateDaoSupport
+                注意：
+                       需要注入SessionFactory/HibernateTemplate
+    4.项目引入Struts框架
+        struts.xml
+    5.Spring与Struts2整合
+        web.xml: 配置struts核心过滤器 Spring监听器
+        整合后Struts.xml中action的配置有两种方式
+        整合后，服务器启动，获取当前服务器创建的WebApplicationContext（IOC 容器对象）
+
+前端页面框架搭建
+
+
+
+

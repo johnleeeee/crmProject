@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<!-- 跟进历史 -->
+<hibernate-mapping package="com.lzq.pojo">
+
+	<class name="TraceHistory" table="t_TraceHistory">
+		<id name="id" type="java.lang.Long">
+			<generator class="native"></generator>
+		</id>
+		
+		<property name="subject" length="50"></property>
+		<property name="content" length="500"></property>
+		<property name="traceMethod" length="30"></property>
+		<property name="traceTime" type="timestamp"></property>
+		<property name="traceResult"></property>
+		
+		<!-- 跟进的“客户” -->
+		<many-to-one name="customer" class="Customer" column="customer_id"></many-to-one>
+		<!-- 跟进的“客户”， 对应的营销人员 -->
+		<many-to-one name="employee" class="Employee" column="employee_id"></many-to-one>
+		
+	</class>
+
+</hibernate-mapping>
+
+
+

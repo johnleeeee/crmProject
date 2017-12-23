@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    	 http://www.springframework.org/schema/beans/spring-beans.xsd
+     	 http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context.xsd
+         http://www.springframework.org/schema/aop
+         http://www.springframework.org/schema/aop/spring-aop.xsd
+         http://www.springframework.org/schema/tx
+     	 http://www.springframework.org/schema/tx/spring-tx.xsd">
+        <!--当前需要注入的属性，在父类中已经注入-->
+        <bean id="departmentDao" class="com.lzq.dao.impl.DepartmentDao" parent="baseDao"></bean>
+        <!--员工-->
+        <bean id="employeeDao" class="com.lzq.dao.impl.EmployeeDao" parent="baseDao"></bean>
+        <!--客户-->
+        <bean id="customerDao" class="com.lzq.dao.impl.CustomerDao" parent="baseDao"></bean>
+        <!-- 跟进历史 -->
+        <bean id="traceHistoryDao" class="com.lzq.dao.impl.TraceHistoryDao" parent="baseDao"></bean>
+        <!-- 客户移交 -->
+        <bean id="transferHistoryDao" class="com.lzq.dao.impl.TransferHistoryDao" parent="baseDao"></bean>
+
+</beans>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    	 http://www.springframework.org/schema/beans/spring-beans.xsd
+     	 http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context.xsd
+         http://www.springframework.org/schema/aop
+         http://www.springframework.org/schema/aop/spring-aop.xsd
+         http://www.springframework.org/schema/tx
+     	 http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+        <!-- 所有的action需要注入的service都在这里定义一次 -->
+        <bean id="baseAction" abstract="true" scope="prototype">
+                <property name="departmentService" ref="departmentService"></property>
+                <property name="employeeService" ref="employeeService"></property>
+                <property name="customerService" ref="customerService"></property>
+                <property name="traceHistoryService" ref="traceHistoryService"></property>
+                <property name="transferHistoryService" ref="transferHistoryService"></property>
+        </bean>
+
+        <!--部门-->
+        <bean id="departmentAction" class="com.lzq.web.DepartmentAction" scope="prototype" parent="baseAction"></bean>
+        <!--员工-->
+        <bean id="employeeAction" class="com.lzq.web.EmployeeAction" scope="prototype" parent="baseAction"></bean>
+        <!--登录-->
+        <bean id="loginAction" class="com.lzq.web.LoginAction" scope="prototype" parent="baseAction"></bean>
+        <!--客户-->
+        <bean id="customerAction" class="com.lzq.web.CustomerAction" scope="prototype" parent="baseAction"></bean>
+        <!--客户跟进-->
+        <bean id="traceHistoryAction" class="com.lzq.web.TraceHistoryAction" parent="baseAction"></bean>
+        <!--客户移交-->
+        <bean id="transferHistoryAction" class="com.lzq.web.TransferHistoryAction" parent="baseAction"></bean>
+</beans>

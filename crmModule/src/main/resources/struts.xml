@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<struts>
+    <!--<constant name="struts.enable.DynamicMethodInvocation" value="false"/>-->
+    <!--设置主题-->
+    <constant name="struts.ui.theme" value="simple"></constant>
+
+    <package name="crm"  extends="struts-default">
+        <!--拦截器配置-->
+        <interceptors>
+            <interceptor name="authInterceptor" class="com.lzq.interceptor.AuthInterceptor"></interceptor>
+            <interceptor-stack name="myStack">
+                <interceptor-ref name="defaultStack"></interceptor-ref>
+                <interceptor-ref name="authInterceptor"></interceptor-ref>
+            </interceptor-stack>
+        </interceptors>
+
+        <!--当前包下所有的action类都应用该拦截器-->
+        <default-interceptor-ref name="myStack"></default-interceptor-ref>
+        <!--全局视图-->
+        <global-results>
+            <result name="input">/login.jsp</result>
+        </global-results>
+        <!--struts2.5 为了增加安全性，在 struts.xml 添加了这么个属性,添加之后才能使用通配符-->
+        <global-allowed-methods>regex:.*</global-allowed-methods>
+        <!--<action name="dept_*" class="departmentAction" method="{1}">
+            <result name="success">/index.jsp</result>
+        </action>-->
+        <!--创建Action对象，会自动去容器中找属性注入，这样不需要配置bean-action.xml-->
+        <!--<action name="dept_*" class="com.lzq.web.DepartmentAction" method="{1}">
+            <result name="success">/index.jsp</result>
+        </action>-->
+        <!--首页视图显示-->
+        <action name="main_*" class="com.lzq.web.MainAction" method="{1}">
+            <!--默认访问主页-->
+            <result>WEB-INF/views/main.jsp</result>
+            <!--头部/菜单/正文-->
+            <result name="{1}">WEB-INF/views/{1}.jsp</result>
+        </action>
+        <!--部门模块-->
+        <action name="dept_*" class="departmentAction" method="{1}">
+            <!--列表-->
+            <result name="list">/WEB-INF/views/department/list.jsp</result>
+            <!--进入添加页面-->
+            <result name="viewEdit">/WEB-INF/views/department/edit.jsp</result>
+        </action>
+
+        <!--员工模块-->
+        <action name="emp_*" class="employeeAction" method="{1}">
+            <!--列表-->
+            <result name="list">/WEB-INF/views/emp/list.jsp</result>
+            <!--进入添加页面-->
+            <result name="viewEdit">/WEB-INF/views/emp/edit.jsp</result>
+            <result name="edit" type="redirectAction">emp_list.action</result>
+        </action>
+
+        <!--员工登录-->
+        <action name="login_*" class="loginAction" method="{1}">
+            <!--指定执行哪个拦截器，这样myStack就不会执行-->
+            <interceptor-ref name="defaultStack"></interceptor-ref>
+            <!--登录成功-->
+            <result name="success" type="redirectAction">main.action</result>
+        </action>
+
+        <!--客户模块-->
+        <action name="customer_*" class="customerAction" method="{1}">
+            <result name="list">/WEB-INF/views/customer/list.jsp</result>
+            <result name="viewEdit">/WEB-INF/views/customer/edit.jsp</result>
+            <result name="listByStatus">/WEB-INF/views/customer/list_status.jsp</result>
+        </action>
+
+        <!-- 5. 客户跟进 -->
+        <action name="traceHistory_*" class="traceHistoryAction" method="{1}">
+            <result name="edit">/WEB-INF/views/trace/edit.jsp</result>
+            <result name="save" type="redirectAction">traceHistory_list</result>
+            <result name="list">/WEB-INF/views/trace/list.jsp</result>
+        </action>
+
+        <!-- 6. 客户移交 -->
+        <action name="transferHistory_*" class="transferHistoryAction" method="{1}">
+            <result name="edit">/WEB-INF/views/transfer/edit.jsp</result>
+            <result name="save" type="redirectAction">transferHistory_list</result>
+            <result name="list">/WEB-INF/views/transfer/list.jsp</result>
+        </action>
+    </package>
+</struts>
